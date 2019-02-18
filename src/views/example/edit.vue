@@ -6,46 +6,6 @@
     class-name="vertical-center-modal"
   >
     <Form ref="exampleForm" :model="exampleForm" :rules="ruleValidate" :label-width="120">
-      <!-- <Row>
-        <Col span="24">
-          <FormItem label="姓名" prop="name">
-            <Input :disabled="isView" v-model="exampleForm.name" placeholder="请输入姓名"></Input>
-          </FormItem>
-        </Col>
-      </Row>
-      <Row>
-        <Col span="24">
-          <FormItem label="性别" prop="gender">
-            <RadioGroup v-model="exampleForm.gender" type="button">
-              <Radio
-                :disabled="isView"
-                v-for="item in $appConst.enum.user_gender"
-                :key="item.key"
-                :label="item.key"
-              >{{item.label}}</Radio>
-            </RadioGroup>
-          </FormItem>
-        </Col>
-      </Row>
-      <Row>
-        <Col span="24">
-          <FormItem label="地址">
-            <Input :disabled="isView" v-model="exampleForm.address" placeholder="请输入地址"></Input>
-          </FormItem>
-        </Col>
-      </Row>
-      <Row>
-        <Col span="24">
-          <FormItem label="创建时间" prop="createTime">
-            <DatePicker
-              :disabled="isView"
-              type="date"
-              placeholder="请选择时间"
-              v-model="exampleForm.createTime"
-            ></DatePicker>
-          </FormItem>
-        </Col>
-      </Row>-->
       <FormItem label="姓名" prop="name">
         <Input :disabled="isView" v-model="exampleForm.name" placeholder="请输入姓名"></Input>
       </FormItem>
@@ -91,7 +51,10 @@ export default {
     return {
       exampleForm: {
         id: '',
-        name: ''
+        name: null,
+        gender: null,
+        address: null,
+        createTime: null
       },
       ruleValidate: {
         name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
@@ -130,7 +93,6 @@ export default {
       this.modal.isvisible = false
     },
     initExample () {
-      this.handleReset()
       if (this.modal.actionType === this.$appConst.ACTION_TYPE.VIEW) {
         this.isView = true
       } else {

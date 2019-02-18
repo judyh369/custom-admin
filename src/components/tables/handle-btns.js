@@ -1,4 +1,35 @@
 const btns = {
+
+  show: (h, params, vm) => {
+    return h('Button', {
+      props: {
+        size: 'small'
+      },
+      style: {
+        marginRight: '2px'
+      },
+      on: {
+        click: () => {
+          vm.$emit('on-show', params.row)
+        }
+      }
+    }, '查看')
+  },
+  edit: (h, params, vm) => {
+    return h('Button', {
+      props: {
+        size: 'small'
+      },
+      style: {
+        marginRight: '2px'
+      },
+      on: {
+        click: () => {
+          vm.$emit('on-edit', params.row)
+        }
+      }
+    }, '编辑')
+  },
   delete: (h, params, vm) => {
     return h('Poptip', {
       props: {
@@ -13,46 +44,13 @@ const btns = {
     }, [
       h('Button', {
         props: {
-          type: 'error',
           size: 'small'
         },
         style: {
-          marginRight: '5px'
+          marginRight: '2px'
         }
       }, '删除')
     ])
-  },
-  show: (h, params, vm) => {
-    return h('Button', {
-      props: {
-        type: 'primary',
-        size: 'small'
-      },
-      style: {
-        marginRight: '5px'
-      },
-      on: {
-        click: () => {
-          vm.$emit('on-show', params.row)
-        }
-      }
-    }, '查看')
-  },
-  edit: (h, params, vm) => {
-    return h('Button', {
-      props: {
-        type: 'primary',
-        size: 'small'
-      },
-      style: {
-        marginRight: '5px'
-      },
-      on: {
-        click: () => {
-          vm.$emit('on-edit', params.row)
-        }
-      }
-    }, '编辑')
   }
 }
 

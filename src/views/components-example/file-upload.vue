@@ -8,9 +8,17 @@
         <FormItem label="地址">
           <Input v-model="exampleForm.address" placeholder="请输入地址"></Input>
         </FormItem>
-        <FormItem>
-          <file-upload ref="appupload" :defaultFileList="defaultList" :sizeLimit="sizeLimit"></file-upload>
-        </FormItem>
+        <Row>
+          <Col span="24">
+            <file-upload
+              ref="appupload"
+              style="margin-left:120px"
+              :defaultFileList="defaultList"
+              :sizeLimit="sizeLimit"
+            ></file-upload>
+          </Col>
+        </Row>
+
         <FormItem class="form-right-group">
           <Button type="primary" @click="handleSubmit">提交</Button>
         </FormItem>
@@ -46,8 +54,11 @@ export default {
       this.$refs.exampleForm.resetFields()
     },
     initialFiles () {
-      this.defaultList = [{ uid: 1, name: '测试文件1.xls', type: 'application/vnd.ms-excel' },
-        { uid: 2, name: '测试文件2.xls', type: 'application/vnd.ms-excel' }]
+      this.defaultList = [
+        { uid: 1, name: 'food.jpeg', status: 'finished', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' },
+        { uid: 2, name: 'food2.jpeg', status: 'finished', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' },
+        { uid: 3, name: '测试文件.xls', status: 'finished', url: 'http://localhost:8078/testfile1.xls' }
+      ]
     }
   },
   mounted () {

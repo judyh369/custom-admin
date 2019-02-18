@@ -1,6 +1,7 @@
 <template>
   <div>
     <Upload
+      ref="upload"
       multiple
       :headers="tokenHeaders"
       :action="actionUrl"
@@ -17,38 +18,44 @@
       <Button icon="ios-cloud-upload-outline" type="primary">上传文件</Button>
       <span
         class="ivu-upload-remark"
-      >文件大小不能超过:{{fileMaxSize}}；文件个数不能超过:{{fileLength}}个；文件格式：{{fileExtentionNames}}</span>
+      >文件大小不能超过:{{fileMaxSize}}M；文件个数不能超过:{{fileLength}}个；文件格式：{{fileExtentionNames}}</span>
     </Upload>
-    <div>
-      <ul class="ivu-upload-list">
-        <li
-          v-for="(item,index) in uploadList"
-          :key="item.attId"
-          class="ivu-upload-list-file ivu-upload-list-file-finish"
-        >
-          <span>
-            <i class="ivu-icon" :class="getFileIcon(item.attType)"></i>
-            {{item.attName}}
-          </span>
-          <i class="ivu-icon ivu-icon-ios-close ivu-upload-list-remove" @click="remove(item,index)"></i>
-        </li>
-      </ul>
-    </div>
+    <ul class="ivu-upload-list">
+      <li
+        v-for="(item,index) in uploadList"
+        :key="index"
+        class="ivu-upload-list-file ivu-upload-list-file-finish"
+      >
+        <template v-if="item.status === 'finished'">
+          <span @click="handleView(item)">{{item.name}}</span>
+          <i
+            class="ivu-icon ivu-icon-ios-trash ivu-upload-list-remove"
+            @click="handelRemove(item,index)"
+          ></i>
+        </template>
+        <template v-else>
+          <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
+        </template>
+      </li>
+    </ul>
+    <Modal title="查看图片" v-model="previewVisible">
+      <img :src="previewImgUrl" v-if="previewVisible" style="width: 100%">
+    </Modal>
   </div>
 </template>
 <script>
-import config from '@/config'
 import { getToken } from '@/utils/auth'
 import { removeFile } from '@/api/example'
 export default {
   data () {
     return {
       tokenHeaders: { Authorization: getToken() },
-      actionUrl: (process.env.NODE_ENV === 'production' ? config.baseUrl.pro : config.baseUrl.dev) + config.uploadFileUrl,
       fileMaxSize: 2,
       uploadList: [],
       formats: ['jpg', 'jpeg', 'png', 'zip', 'txt', 'xls', 'pdf'],
-      fileLength: 5
+      fileLength: 5,
+      previewVisible: false,
+      previewImgUrl: ''
     }
   },
   props: {
@@ -57,11 +64,20 @@ export default {
     sizeLimit: Number
   },
   methods: {
+    handleView (file) {
+      if (file.type.indexOf('image') === 0) {
+        this.previewImgUrl = file.url
+        this.previewVisible = true
+      } else {
+
+      }
+    },
     handleSuccess (res, file) {
-      if (res.code === 0) {
+      if (res.code === 200) {
         let uploadFile = res.data
-        uploadFile.uid = file.uid
-        this.uploadList.push(uploadFile)
+        file.url = uploadFile.attachmentPath + '/' + uploadFile.realName
+        file.name = uploadFile.attachmentName
+        this.uploadList = this.$refs.upload.fileList
         this.$Message.success('上传成功')
       } else {
         this.$Message.error('上传失败')
@@ -79,14 +95,16 @@ export default {
         desc: '文件  ' + file.name + ' 上传出错：' + error
       })
     },
-    remove (item, index) {
+    handelRemove (file, index) {
       let _this = this
       _this.$Modal.confirm({
         title: '确认删除？',
         onOk: () => {
-          removeFile(item.attId).then(res => {
+          removeFile(file.attId).then(res => {
+            const fileList = _this.$refs.upload.fileList
+            _this.$refs.upload.fileList.splice(fileList.indexOf(file), 1)
+            _this.uploadList = _this.$refs.upload.fileList
             _this.$Message.success('删除成功')
-            _this.uploadList.splice(index, 1)
           })
         }
       })
@@ -115,20 +133,17 @@ export default {
       }).join(',')
       return result
     },
-    getFileIcon (attType) {
-      if (!attType) return ''
-      console.log(attType)
-      let type = attType.split('/')[0]
-      if (type === 'img' || type === 'IMG') {
-        return 'ivu-icon-ios-image'
-      } else {
-        return 'ivu-icon-ios-stats'
-      }
-    },
+    // getFileIcon (attType) {
+    //   if (!attType) return ''
+    //   console.log(attType)
+    //   let type = attType.split('/')[0]
+    //   if (type === 'img' || type === 'IMG') {
+    //     return 'ivu-icon-ios-image'
+    //   } else {
+    //     return 'ivu-icon-ios-stats'
+    //   }
+    // },
     initFiles () {
-      if (this.action) {
-        this.actionUrl = this.action
-      }
       if (this.sizeLimit) {
         this.fileMaxSize = this.sizeLimit
       }
@@ -137,17 +152,27 @@ export default {
   computed: {
     fileExtentionNames () {
       return this.formats.join(',')
+    },
+    actionUrl () {
+      if (this.action) {
+        return this.action
+      } else {
+        return this.$appConst.fileUploadUrl
+      }
     }
   },
   watch: {
     defaultFileList (list) {
-      this.uploadList = list.map(el => {
-        return { attName: el.name, attType: el.type, size: el.size }
-      })
+      if (this.uploadList.length === 0) {
+        list.forEach(el => {
+          this.uploadList.push(el)
+        })
+      }
     }
   },
   mounted () {
     this.initFiles()
+    this.uploadList = this.$refs.upload.fileList
   }
 }
 </script>
@@ -155,4 +180,51 @@ export default {
 .ivu-upload-remark {
   padding-left: 10px;
 }
+.file-list {
+  font-size: 20px;
+}
+.file-list span {
+  font-size: 20px;
+}
+/* .file-list {
+  padding: 4px;
+  color: #515a6e;
+  border-radius: 4px;
+  transition: background-color 0.2s ease-in-out;
+  overflow: hidden;
+  position: relative;
+} */
+.custom-upload {
+  height: 36px;
+}
+.file-title {
+  font-size: 16px;
+}
+.upload-btn {
+  float: right;
+}
+/* .ivu-upload-list-remove {
+  opacity: 0;
+  font-size: 18px;
+  cursor: pointer;
+  float: right;
+  margin-right: 4px;
+  color: #999;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+.ivu-icon {
+  display: inline-block;
+  font-family: "Ionicons";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  vertical-align: middle;
+} */
 </style>

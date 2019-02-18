@@ -1,3 +1,5 @@
+
+import config from '@/config'
 export default {
 
   enum: {
@@ -31,6 +33,7 @@ export default {
       marginRight: '5px'
     }
 
-  }
-
+  },
+  fileUploadUrl: (process.env.NODE_ENV === 'production' ? config.baseUrl.pro : config.baseUrl.dev) + config.uploadFileUrl,
+  fileDownloadUrl: (process.env.NODE_ENV === 'production' ? config.baseUrl.pro : config.baseUrl.dev) + config.downloadFileUrl
 }

@@ -5,8 +5,13 @@ export const login = ({ userName, password }) => {
     userName,
     password
   }
+  // return axios.request({
+  //   url: 'account/login',
+  //   data,
+  //   method: 'post'
+  // })
   return axios.request({
-    url: 'account/login',
+    url: 'login',
     data,
     method: 'post'
   })

@@ -92,7 +92,13 @@ export const updateApp = req => {
   let editapp = JSON.parse(req.body)
   List = List.map(function (item) {
     if (item.id === editapp.id) {
-      return { id: editapp.id, name: editapp.name, address: editapp.address, createTime: editapp.createTime }
+      return {
+        id: editapp.id,
+        name: editapp.name,
+        address: editapp.address,
+        gender: editapp.gender,
+        createTime: editapp.createTime
+      }
     } else {
       return item
     }

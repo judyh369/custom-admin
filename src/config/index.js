@@ -11,12 +11,13 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'https://www.easy-mock.com/mock/5c481aed349db30a8801b415/custom-frame/',
+    // dev: 'https://www.easy-mock.com/mock/5c481aed349db30a8801b415/custom-frame/',
+    dev: 'http://192.168.250.65:8081/',
     pro: 'https://produce.com'
   },
-  uploadFileUrl: 'uploadFile',
-  downloadFileUrl: 'downloadFile',
-  deleteFileUrl: 'deleteFile',
+  uploadFileUrl: 'api/file/uploadFile',
+  downloadFileUrl: 'api/file/downloadFile',
+  deleteFileUrl: 'api/file/deleteFile',
   /**
    * @description 默认打开的首页的路由name值，默认为home
    */

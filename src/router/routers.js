@@ -58,6 +58,7 @@ export default [
         name: 'list',
         meta: {
           title: 'demo列表',
+          notCache: true,
           icon: 'md-grid'
         },
         component: () => import('@/views/example/list')
@@ -67,6 +68,7 @@ export default [
         name: 'page_list',
         meta: {
           title: '分页封装',
+          notCache: true,
           icon: 'md-git-branch'
         },
         component: () => import('@/views/example/listpage')
@@ -110,13 +112,13 @@ export default [
     },
     children: [
       {
-        path: 'transfer_example',
-        name: 'transfer_example',
+        path: 'table_list',
+        name: 'table_list',
         meta: {
-          title: '穿梭框',
-          icon: 'md-list'
+          title: 'tables',
+          icon: 'md-git-branch'
         },
-        component: () => import('@/views/components-example/transfer')
+        component: () => import('@/views/example/listpage')
       },
       {
         path: 'editor_example',
@@ -128,33 +130,13 @@ export default [
         component: () => import('@/views/components-example/editor')
       },
       {
-        path: 'icons_example',
-        name: 'icons_example',
-        meta: {
-          title: '图标',
-          icon: 'icon-bear'
-        },
-        component: () => import('@/views/components-example/icons')
-      }
-    ]
-  },
-  {
-    path: '/file',
-    name: 'file',
-    component: Main,
-    meta: {
-      icon: 'md-cloud-upload',
-      title: '文件相关'
-    },
-    children: [
-      {
         path: 'file_upload',
         name: 'file_upload',
         meta: {
           title: '文件上传',
           icon: 'ios-document'
         },
-        component: () => import('@/views/file-example/file-upload')
+        component: () => import('@/views/components-example/file-upload')
       },
       {
         path: 'file_download',
@@ -163,7 +145,26 @@ export default [
           title: '文件下载',
           icon: 'md-clipboard'
         },
-        component: () => import('@/views/file-example/file-download')
+        component: () => import('@/views/components-example/file-download')
+      },
+      {
+        path: 'transfer_example',
+        name: 'transfer_example',
+        meta: {
+          title: '穿梭框',
+          icon: 'md-list'
+        },
+        component: () => import('@/views/components-example/transfer')
+      },
+
+      {
+        path: 'icons_example',
+        name: 'icons_example',
+        meta: {
+          title: '图标',
+          icon: 'icon-bear'
+        },
+        component: () => import('@/views/components-example/icons')
       }
     ]
   },

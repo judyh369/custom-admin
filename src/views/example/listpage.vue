@@ -13,25 +13,19 @@
         <Select class="search-col" clearable v-model="searchData.city" placeholder="请选择城市">
           <Option v-for="item in cities" :value="item.label" :key="item.key">{{ item.label }}</Option>
         </Select>
-        <Button class="search-btn" @click="$refs.tables.search()" type="primary">
-          <Icon type="search"/>搜索
-        </Button>
-        <div class="search-action">
-          <Button type="primary" @click="handleCreate()">
-            <Icon/>添加
-          </Button>
-        </div>
+        <Button class="search-btn" @click="handleSearch" icon="ios-search" type="primary" ghost>搜索</Button>
       </div>
-      <div class="search-actions">
-        <Button type="primary" @click="handleMutiltRemove()">删除</Button>
+      <div class="tables-bar">
+        <Button type="primary" class="tables-btn" @click="handleCreate()">添加</Button>
+        <Button type="primary" class="tables-btn" @click="handleMutiltRemove()">删除</Button>
       </div>
       <app-table
         ref="tables"
         stripe
         :columns="columns"
         :searchData="searchData"
-        :options="options"
-        @on-delete="handleRemove"
+        :fetch-data-api="fetchDataApi"
+        @on-delete="handleDelete"
         @on-show="handleShow"
         @on-edit="handleEdit"
         @on-selection-change="handleSelectChange"
@@ -53,10 +47,9 @@ export default {
       btnSetting: this.$appConst.rowBtnSetting,
       searchData: {
         name: '',
-        page: 1,
-        pageSize: 10,
         sort: { key: 'CreateTime', order: true }
       },
+      fetchDataApi: fetchPages,
       columns: [
         { title: '全选',
           type: 'selection',
@@ -79,7 +72,7 @@ export default {
                   size: 'small'
                 },
                 style: {
-                  marginRight: '5px'
+                  marginRight: '2px'
                 },
                 on: {
                   click: () => {
@@ -91,9 +84,6 @@ export default {
           ]
         }
       ],
-      options: {
-        doSearch: fetchPages
-      },
       cities: [],
       selectRows: [],
       modal: {
@@ -108,6 +98,9 @@ export default {
     AppTable
   },
   methods: {
+    handleSearch () {
+      this.$refs.tables.search()
+    },
     handleCreate () {
       this.initialModal('新增', this.$appConst.ACTION_TYPE.CREATE)
     },
@@ -122,9 +115,17 @@ export default {
       this.modal.title = title
       this.modal.actionType = actionType
       if (id) { this.modal.id = id }
+      // 清空之前的值
+      this.$refs.modal.exampleForm = {
+        id: '',
+        name: '',
+        gender: null,
+        address: '',
+        createTime: null
+      }
       this.$refs.modal.initExample()
     },
-    handleRemove (row) {
+    handleDelete (row) {
       this.deleteApps(row.id)
     },
     handleMutiltRemove () {

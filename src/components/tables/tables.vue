@@ -69,6 +69,7 @@ export default {
     options: {
       type: Object
     },
+    fetchDataApi: Function,
     columns: {
       type: Array,
       default () {
@@ -190,6 +191,7 @@ export default {
       return item
     },
     handleColumns (columns) {
+      console.log(columns)
       this.insideColumns = columns.map((item, index) => {
         let res = item
         if (res.enum) {
@@ -197,17 +199,21 @@ export default {
         } else {
           if (res.key === 'handle') res = this.suportHandle(res)
         }
-
         return res
       })
     },
     search () {
       let _this = this
-      this.options.doSearch(this.searchData).then(res => {
+      this.fetchDataApi(this.searchData).then(res => {
         _this.insideTableData = res.data.list
         _this.total = res.data.total
         _this.handleColumns(_this.columns)
       })
+      // this.options.doSearch(this.searchData).then(res => {
+      //   _this.insideTableData = res.data.list
+      //   _this.total = res.data.total
+      //   _this.handleColumns(_this.columns)
+      // })
     },
     init () {
       this.searchData.page = this.searchData.page || 1

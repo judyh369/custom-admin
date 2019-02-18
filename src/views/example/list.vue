@@ -13,14 +13,10 @@
         <Select class="search-col" clearable v-model="searchData.city" placeholder="请选择城市">
           <Option v-for="item in cities" :value="item.label" :key="item.key">{{ item.label }}</Option>
         </Select>
-        <Button class="search-btn" @click="searchExamples" type="primary">
-          <Icon type="search"/>搜索
-        </Button>
-        <div class="search-action">
-          <Button type="primary" @click="create()">
-            <Icon/>添加
-          </Button>
-        </div>
+        <Button class="search-btn" @click="searchExamples" icon="ios-search" type="primary" ghost>搜索</Button>
+      </div>
+      <div class="tables-bar">
+        <Button type="primary" class="tables-btn" @click="handleCreate()">添加</Button>
       </div>
       <Table
         ref="tables"
@@ -35,25 +31,10 @@
           slot="gender"
         >{{ row.gender | getConstLabel($appConst.enum.user_gender) }}</template>
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="primary" size="small" @click="handleShow(row,index)">查看</Button>
-          <Button
-            type="primary"
-            size="small"
-            class="table-row-btn"
-            @click="handleEdit(row,index)"
-          >编辑</Button>
-          <Button
-            type="primary"
-            size="small"
-            class="table-row-btn"
-            @click="handleEditJobs(row,index)"
-          >工作</Button>
-          <Button
-            type="error"
-            size="small"
-            class="table-row-btn"
-            @click="handleRemove(row,index)"
-          >删除</Button>
+          <Button size="small" @click="handleShow(row,index)">查看</Button>
+          <Button size="small" class="tables-row-btn" @click="handleEdit(row,index)">编辑</Button>
+          <Button size="small" class="tables-row-btn" @click="handleEditJobs(row,index)">工作</Button>
+          <Button size="small" class="tables-row-btn" @click="handleDelete(row,index)">删除</Button>
         </template>
       </Table>
       <div class="pages">
@@ -122,9 +103,17 @@ export default {
       this.modal.title = title
       this.modal.actionType = actionType
       if (id) { this.modal.id = id }
+      // 清空之前的值
+      this.$refs.modal.exampleForm = {
+        id: '',
+        name: '',
+        gender: null,
+        address: '',
+        createTime: null
+      }
       this.$refs.modal.initExample()
     },
-    handleRemove (row, index) {
+    handleDelete (row, index) {
       this.$Modal.confirm({
         title: '确认删除？',
         onOk: () => {
