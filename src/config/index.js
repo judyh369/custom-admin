@@ -12,7 +12,7 @@ export default {
    */
   baseUrl: {
     // dev: 'https://www.easy-mock.com/mock/5c481aed349db30a8801b415/custom-frame/',
-    dev: 'http://192.168.250.65:8081/',
+    dev: 'http://localhost:5000/',
     pro: 'https://produce.com'
   },
   uploadFileUrl: 'api/file/uploadFile',

@@ -3,7 +3,6 @@
     <Upload
       ref="upload"
       multiple
-      :headers="tokenHeaders"
       :action="actionUrl"
       :show-upload-list="false"
       :default-file-list="defaultFileList"
@@ -65,19 +64,18 @@ export default {
   },
   methods: {
     handleView (file) {
-      if (file.type.indexOf('image') === 0) {
-        this.previewImgUrl = file.url
-        this.previewVisible = true
-      } else {
+      // if (file.type.indexOf('image') === 0) {
+      //   this.previewImgUrl = file.url
+      //   this.previewVisible = true
+      // } else {
 
-      }
+      // }
     },
     handleSuccess (res, file) {
       if (res.code === 200) {
         let uploadFile = res.data
         file.url = uploadFile.attachmentPath + '/' + uploadFile.realName
         file.name = uploadFile.attachmentName
-        this.uploadList = this.$refs.upload.fileList
         this.$Message.success('上传成功')
       } else {
         this.$Message.error('上传失败')
@@ -103,7 +101,7 @@ export default {
           removeFile(file.attId).then(res => {
             const fileList = _this.$refs.upload.fileList
             _this.$refs.upload.fileList.splice(fileList.indexOf(file), 1)
-            _this.uploadList = _this.$refs.upload.fileList
+
             _this.$Message.success('删除成功')
           })
         }
@@ -163,16 +161,20 @@ export default {
   },
   watch: {
     defaultFileList (list) {
-      if (this.uploadList.length === 0) {
-        list.forEach(el => {
-          this.uploadList.push(el)
-        })
-      }
+      this.$nextTick(() => {
+        this.uploadList = this.$refs.upload.fileList
+      })
+
+      // if (this.uploadList.length === 0) {
+      //   list.forEach(el => {
+      //     this.uploadList.push(el)
+      //   })
+      // }
     }
   },
   mounted () {
     this.initFiles()
-    this.uploadList = this.$refs.upload.fileList
+    // this.uploadList = this.$refs.upload.fileList
   }
 }
 </script>

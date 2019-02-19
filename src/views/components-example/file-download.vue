@@ -22,8 +22,7 @@ export default {
   },
   methods: {
     initFiles () {
-      this.downList = [{ attId: 1, attName: '测试文件1.xls', attType: 'application/vnd.ms-excel' },
-        { attId: 2, attName: '测试文件2.xls', attType: 'application/vnd.ms-excel' }]
+      this.downList = [{ attachmentID: '2b123c84-fd46-45ff-8e1e-8bf278770c97', attachmentName: '图片.png', attachmentType: 'image/png' }]
     }
   },
   mounted () {

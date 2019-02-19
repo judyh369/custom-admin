@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
-// import { login, logout, getUserInfo } from './login'
+import { login, logout, getUserInfo } from './login'
 // import { fetchPages, fetchList, fetchCities, addApp, updateApp, deleteApp, fetchApp, uploadFile, removeFile } from './example'
-import { logout, getUserInfo } from './login'
+// import { logout, getUserInfo } from './login'
 import { fetchPages, fetchList, fetchCities, addApp, updateApp, deleteApp, fetchApp, removeFile } from './example'
 
 // 配置Ajax请求延时，可用来测试网络延迟大时项目中一些效果
@@ -9,7 +9,7 @@ import { fetchPages, fetchList, fetchCities, addApp, updateApp, deleteApp, fetch
 //   timeout: 1000
 // })
 
-// Mock.mock(/\/account\/login/, 'post', login)
+Mock.mock(/\/login/, 'post', login)
 Mock.mock(/\/account\/userinfo/, 'get', getUserInfo)
 Mock.mock(/\/account\/logout/, 'post', logout)
 Mock.mock(/\/example\/pages/, 'post', fetchPages)

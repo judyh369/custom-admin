@@ -7,17 +7,17 @@
         :key="index"
         class="ivu-upload-list-file ivu-upload-list-file-finish"
       >
-        <span @click="download(item)">
-          <i class="ivu-icon" :class="getFileIcon(item.attType)"></i>
-          {{item.attName}}
-        </span>
+        <span @click="download(item)">{{item.attachmentName}}</span>
+        <!-- <i
+          class="ivu-icon ivu-icon-ios-trash ivu-upload-list-remove"
+          @click="handelRemove(item,index)"
+        ></i>-->
       </li>
     </ul>
   </div>
 </template>
 <script>
 /* 下载附件 */
-import config from '@/config'
 import { downloadfile } from '@/api/example'
 export default {
   name: '',
@@ -32,13 +32,11 @@ export default {
   methods: {
     download (item) {
       let options = {
-        url: (process.env.NODE_ENV === 'production' ? config.baseUrl.pro : config.baseUrl.dev) + config.downloadFileUrl,
-        fileName: item.attName,
-        data: { attId: item.attId }
+        url: this.$appConst.fileDownloadUrl,
+        fileName: item.attachmentName,
+        data: { attachmentID: item.attachmentID, attachmentName: item.attachmentName }
       }
-      downloadfile(options).then(res => {
-
-      })
+      downloadfile(options)
     },
     getFileIcon (attType) {
       if (!attType) return ''

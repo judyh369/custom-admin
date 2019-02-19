@@ -1,5 +1,5 @@
 import axios from '@/utils/api.request'
-
+import { getToken } from '@/utils/auth'
 export function fetchPages (data) {
   return axios.request({
     url: 'example/pages',
@@ -72,7 +72,7 @@ export function downloadfile (options) {
   let url = options.url
   xhr.open('POST', url, true)
   xhr.responseType = 'arraybuffer'
-  // xhr.setRequestHeader('Authorization', $base.GetCookie($types.SET_TOKEN)) // 请求头中的验证信息等（如果有）
+  xhr.setRequestHeader('Authorization', getToken()) // 请求头中的验证信息等（如果有）
   xhr.setRequestHeader('Content-Type', options.contentType || 'application/json;charset=UTF-8')
   xhr.onload = function () {
     if (this.status === 200) {
